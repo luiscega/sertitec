@@ -1,0 +1,37 @@
+<html>
+<head>
+   <title>Google Map</title>
+   <link href="estilo.css" type=text/css rel=stylesheet>
+   <script type="text/javascript" src="script.js"></script>
+  
+  <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyCbvFy2ahdZTIXd-h-xu5AfnXvIEDMvLBk",
+        authDomain: "servitec-e0a7d.firebaseapp.com",
+        databaseURL: "https://servitec-e0a7d-default-rtdb.firebaseio.com",
+        projectId: "servitec-e0a7d",
+        storageBucket: "servitec-e0a7d.appspot.com",
+        messagingSenderId: "357483870636",
+        appId: "1:357483870636:web:1c363c7b03f24c48b2e209",
+        measurementId: "G-VTQEHPS5CF",
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      
+    </script>
+</head>
+<body>
+   <h1>---</h1>
+   <p></p>
+   <div id="mapa"></div>
+</body>
+</html>
