@@ -27,43 +27,71 @@ for (let i in marcadores)
     async function procesaDatos( _data)
     {
         let data = _data;
-        console.log("PROCESANDO",data);
-        console.log("marcador",marcadores);
+        let  codigo = _data.CODIGO;
 
-        var elemento = marcadores.find( elemento => elemento.AGENTE == data.CODIGO);
-        console.log(elemento,data.CODIGO);
+        //console.log("PROCESANDO",data);
+
+
+        var elemento = marcadores.find( elemen => elemen.AGENTE == data.CODIGO);
+        console.log("RESU ",elemento);
+        
 
         if( elemento != undefined)
         {
             elemento.MARCADOR.setMap(null);
             console.log("EXISTE Elemento : ", elemento);
             elemento.MARCADOR = new google.maps.Marker({
-                position: new google.maps.LatLng(data.POSICION.LONGITUD, data.POSICION.LATITUD),
+                position: new google.maps.LatLng(data.POSICION.LATITUD , data.POSICION.LONGITUD),
                 map: miMapa,
                 title:data.NOMBRE
             });         
+
+            elemento.MARCADOR.addListener('click', function() 
+            {
+                elemento.SEGUIR = "1";
+                miMapa.setZoom(8);
+                console.log("CLICK: ",marcadores);
+                miMapa.setCenter(elemento.MARCADOR.getPosition());
+            });
+
         }
         else
         {
-            let agente = data.CODIGO;
+            console.log("CREO Elemento : ");
+            let agente = data.CODIGO.toString();
             const image = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
             console.log(1,data.CODIGO);
             var MarcadorAgente = new google.maps.Marker(
                 {
                     position: new google.maps.LatLng(data.POSICION.LATITUD , data.POSICION.LONGITUD),
                     map: miMapa,
-                    icon: image,
                     title:data.NOMBRE
                 });                
-            console.log(2,data.CODIGO);
-            marcadores[marcadores.length] = {"AGENTE":agente,"MARCADOR":MarcadorAgente};
-            console.log(3,data.CODIGO);
-            
-            console.log("CREADO: ",marcadores);
+                marcadores[marcadores.length] = {"AGENTE":agente,"MARCADOR":MarcadorAgente,"SEGUIR":'0'};
+
+                MarcadorAgente.addListener('click', (e) =>
+                {                    
+                    console.log(MarcadorAgente);                   
+                    console.log(e);                   
+                    miMapa.setCenter(MarcadorAgente.getPosition());                    
+                });
         }
+        console.log("FINAL: ",marcadores);
+        const moveto = marcadores.find( elemen => elemen.SEGUIR == '1')
+        console.log("MOVE: ",moveto);
+        moveToLocation(  moveto);
     }
 
-    
+
+    function moveToLocation(data)
+    {
+        console.log("movido");
+        //const center;
+        if( data != undefined )
+            miMapa.setCenter(data.MARCADOR.getPosition());                    
+            //miMapa.panTo(new google.maps.LatLng(data.POSICION.LATITUD , data.POSICION.LONGITUD));
+      }
+
     async function procesa ( xdata )
     {
         /*
@@ -78,11 +106,11 @@ for (let i in marcadores)
         {    
             marcadores[j].MARCADOR.setMap(null);
         }
-        marcadores.length = 0;
+        //marcadores.length = 0;
 
         for  (let i in xdata) 
         {    
-            console.log(i,xdata[i].CODIGO);            
+            //console.log(i,xdata[i].CODIGO);            
             
             await    procesaDatos( xdata[i] );
             
@@ -110,7 +138,7 @@ for (let i in marcadores)
      //Opciones del mapa
      var OpcionesMapa = {
          center: new google.maps.LatLng(38.3489719, -0.4780289000000266),
-         mapTypeId: google.maps.MapTypeId.SATELLITE, //ROADMAP  SATELLITE HYBRID TERRAIN
+         mapTypeId: google.maps.MapTypeId.HYBRID, //ROADMAP  SATELLITE HYBRID TERRAIN
          mapMaker: true,
          zoom: 5
      };
